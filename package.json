@@ -1,6 +1,6 @@
 {
   "name": "@prathammahajan/system-monitoring-suite",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "🚀 Enterprise-grade Node.js system monitoring suite with real-time metrics collection, intelligent alerting, performance analytics, health monitoring, and comprehensive observability. Features CPU, memory, disk, and network monitoring with TypeScript support, event-driven architecture, and seamless integration with popular DevOps tools. Perfect for production environments, DevOps teams, SRE engineers, and application monitoring.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
