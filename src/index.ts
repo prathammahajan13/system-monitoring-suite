@@ -148,7 +148,7 @@ export class SystemMonitor extends EventEmitter {
   private startTime: number = 0;
   private metrics: SystemMetrics[] = [];
   private alerts: Alert[] = [];
-  private lastNetworkStats: any = {};
+  private lastNetworkStats: unknown = {};
 
   constructor(config: SystemMonitorConfig = {}) {
     super();
@@ -299,7 +299,7 @@ export class SystemMonitor extends EventEmitter {
     }
 
     try {
-      const [cpu, cpuCurrentSpeed, cpuTemperature] = await Promise.all([
+      const [cpu, , cpuTemperature] = await Promise.all([
         si.currentLoad(),
         si.cpuCurrentSpeed(),
         si.cpuTemperature().catch(() => null)
@@ -309,7 +309,7 @@ export class SystemMonitor extends EventEmitter {
         usage: Math.round(cpu.currentLoad),
         cores: cpu.cpus.length,
         temperature: cpuTemperature?.main || undefined,
-        loadAverage: (cpu as any).loadavg || []
+        loadAverage: (cpu as { loadavg?: number[] }).loadavg || []
       };
     } catch (error) {
       this.emit('error', new Error(`Failed to get CPU metrics: ${error}`));
@@ -376,7 +376,6 @@ export class SystemMonitor extends EventEmitter {
 
     try {
       const networkStats = await si.networkStats();
-      const currentTime = Date.now();
       
       const interfaces = networkStats.map(iface => {
         return {
@@ -504,7 +503,24 @@ export class SystemMonitor extends EventEmitter {
     return [...this.alerts];
   }
 
-  public getAnalysis(): any {
+  public getAnalysis(): {
+    summary: {
+      overallHealth: 'healthy' | 'degraded' | 'unhealthy';
+      score: number;
+      keyIssues: string[];
+      recommendations: string[];
+    };
+    trends: {
+      cpu: 'increasing' | 'decreasing' | 'stable';
+      memory: 'increasing' | 'decreasing' | 'stable';
+      disk: 'increasing' | 'decreasing' | 'stable';
+    };
+    averages: {
+      cpu: number;
+      memory: number;
+      disk: number;
+    };
+  } | null {
     if (this.metrics.length === 0) return null;
 
     const recentMetrics = this.metrics.slice(-10); // Last 10 metrics

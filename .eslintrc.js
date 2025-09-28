@@ -2,7 +2,6 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
   ],
   plugins: ['@typescript-eslint'],
   parserOptions: {
@@ -22,6 +21,6 @@ module.exports = {
   env: {
     node: true,
     es6: true,
-    jest: true,
   },
+  ignorePatterns: ['dist/', 'node_modules/', '*.js'],
 };
