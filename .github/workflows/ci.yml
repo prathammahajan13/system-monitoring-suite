@@ -65,7 +65,7 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: false  # Temporarily disabled - enable after adding NPM_TOKEN secret
 
     steps:
     - name: Checkout code
